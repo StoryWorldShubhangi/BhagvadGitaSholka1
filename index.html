@@ -84,14 +84,6 @@ html, body {
   align-items: center;
   z-index: 20000;
 }
- #question-box {
-      background: rgba(255,255,255,0.95);
-      padding: 22px;
-      border-radius: 14px;
-      border: 3px solid #ff8c00;
-      width: 360px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-    }
 
 .opt-btn {
   padding: 10px 18px;
@@ -180,7 +172,24 @@ video::-webkit-media-controls-fullscreen-button {
   flex-direction: column;
   align-items: center;
   gap: 14px;
+
+  background: rgba(255,255,255,0.95);
+  padding: 18px 16px;
+  border-radius: 14px;
+  border: 3px solid #ff8c00;
+  width: 90vw;        /* mobile-friendly */
+  max-width: 360px;  /* desktop-safe */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
+
+#question-text {
+  font-size: 17px;
+  line-height: 1.4;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+
 
 .opt-btn {
   width: 100%;
@@ -217,6 +226,24 @@ video::-webkit-media-controls-fullscreen-button {
   }
 
 }
+
+@media (max-width: 480px) {
+  #question-box {
+    width: 92vw;
+    padding: 16px 14px;
+  }
+
+  #question-text {
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  .opt-btn {
+    font-size: 15px;
+    padding: 12px;
+  }
+}
+
 
 
 
@@ -261,7 +288,7 @@ Click the video below and enjoy the story together.</p>
 <div id="player-wrapper">
   <video id="storyVideo" controls playsinline preload="auto" controlsList="nofullscreen nodownload noplaybackrate">
     <source
-      src="  https://res.cloudinary.com/db3fgmc1c/video/upload/v1769061769/gita_part1_unsdr7.mp4"
+      src="https://res.cloudinary.com/db3fgmc1c/video/upload/v1769061769/gita_part1_unsdr7.mp4"
       type="video/mp4"> 
 	  <!-- <source src="story.mp4" > -->
   </video>
@@ -354,24 +381,29 @@ let score = 0;
 const questions = [
 
 {
+	part: 0,
     time: 67.5,
    text: `How do you usually feel when it’s your school exam day 
 or competition day or something very important to you?
+
 Tap the face that feels most like you.`,
 options: { A: "😀 Happy & Confident", B: "😟😟 A Little Worried", C: "😰😰😰😰😰 Very Nervous" }
   },
   
   {
+	part: 0,
     time: 125,
     text: "What helps you do your best in exams?",
     options: { A: "🗓️ Make a timetable", B: "⚽ Skip playtime for some time", C: "📵 Reduce screen time" }
   },
   {
+	part: 0,
     time: 175,
     text: "How do you feel when your parents support you in such moments?",
     options: { A: "😊 Relaxed", B: "💛 Confident", C: "🤗 Happy"}
   },
    {
+   part: 1,  
     time: 72,
     text: "what happens when we worry too much?",
     options: { A: "💭 Mind feels heavy", B: "📚 Focus reduces", C: "😌 Calmness goes away" }
@@ -404,12 +436,15 @@ storyVideo.addEventListener("play", () => {
 });
 
 storyVideo.addEventListener("timeupdate", () => {
-  if (questionActive || currentPart !== 0) return;
+ if (questionActive) return;
 
-  const q = questions[currentQuestionIndex];
-  if (q && storyVideo.currentTime >= q.time) {
-    showQuestion(q);
-  }
+const q = questions[currentQuestionIndex];
+if (!q || q.part !== currentPart) return;
+
+if (storyVideo.currentTime >= q.time) {
+  showQuestion(q);
+}
+
 });
 
 
@@ -509,16 +544,20 @@ storyVideo.addEventListener("play", enterFakeFullscreen);
 
 storyVideo.addEventListener("ended", () => {
 
-  // If part-1 ended → load part-2
+  // PART 1 → PART 2
   if (currentPart === 0) {
     currentPart = 1;
+
+    // 🔑 jump directly to first question of part-2
+    currentQuestionIndex = questions.findIndex(q => q.part === 1);
+
     storyVideo.src = videoParts[currentPart];
     storyVideo.load();
     storyVideo.play();
     return;
   }
 
-  // If part-2 ended → show scoreboard
+  // PART 2 END → SCOREBOARD
   questionActive = false;
   overlay.style.display = "none";
 
@@ -531,12 +570,13 @@ storyVideo.addEventListener("ended", () => {
 });
 
 
+
 let maxWatchedTime = 0;
 
 // Track natural progress
-video.addEventListener("timeupdate", () => {
-  if (!video.seeking && !questionActive) {
-    maxWatchedTime = Math.max(maxWatchedTime, video.currentTime);
+storyVideo.addEventListener("timeupdate", () => {
+  if (!storyVideo.seeking && !questionActive) {
+    maxWatchedTime = Math.max(maxWatchedTime, storyVideo.currentTime);
   }
 });
 
