@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Welcome Story Page</title>
+
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #fffaf4;
+  text-align: center;
+  color: #6b4b34;
+  overflow-x: hidden;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+/* ===== BANNER ===== */
+.banner-video {
+  position: relative;
+  height: 380px;
+  overflow: hidden;
+}
+.banner-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.banner-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255,243,217,0.95);
+  color: #6b4b34;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* ===== STORY VIDEO ===== */
+
+#storyVideo {
+  width: 100%;
+  background: black;
+}
+
+
+#player-wrapper.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  margin: 0;
+  background: black;
+  z-index: 9999;
+}
+
+#player-wrapper.fullscreen video {
+  width: 100vw;
+  height: 100vh;
+  object-fit: contain; /* or cover if you want */
+}
+
+
+/* ===== QUESTION OVERLAY ===== */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 20000;
+}
+ #question-box {
+      background: rgba(255,255,255,0.95);
+      padding: 22px;
+      border-radius: 14px;
+      border: 3px solid #ff8c00;
+      width: 360px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+
+.opt-btn {
+  padding: 10px 18px;
+  margin: 8px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#wrong-msg {
+  color: red;
+  font-weight: bold;
+  display: none;
+}
+  #kidMessage {
+  position: fixed;
+  bottom: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff3d9;
+  color: #6b4b34;
+  padding: 12px 20px;
+  border-radius: 18px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 40000;
+}
+
+/* ===== SCORE BOARD ===== */
+#scoreBoard {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.95);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 30000;
+}
+
+ .avatar {
+      width: 150px;
+      border-radius: 50%;
+      border: 6px solid #fff6ea;
+      box-shadow: 0 6px 20px rgba(107,61,35,0.12);
+    }
+
+video::-webkit-media-controls-fullscreen-button {
+  display: none;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.avatar {
+  width: 220px;
+  height: auto;
+  border-radius: 18px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+.hero-text {
+  max-width: 600px;
+  text-align: left;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.selected {
+  background-color: #ffe8a3;
+  border: 3px solid #ffb703;
+  transform: scale(1.05);
+}
+
+#question-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.opt-btn {
+  width: 100%;
+  max-width: 280px;
+  padding: 12px 16px;
+  font-size: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+#continue-btn {
+  margin-top: 18px;
+  padding: 12px 26px;
+  font-size: 16px;
+  border-radius: 20px;
+  background-color: #ffd966;
+  border: none;
+  cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-text {
+    text-align: center;
+  }
+
+  .avatar {
+    width: 180px;
+  }
+
+}
+
+
+
+</style>
+</head>
+
+<body>
+
+<!-- 🎬 BANNER -->
+<div class="banner-video">
+  <div class="banner-hint">👇 Scroll down to start the story 👇</div>
+  <video autoplay muted loop playsinline>
+    <source src="welcome_banner.mp4" type="video/mp4"/>
+  </video>
+</div>
+
+<h1>Hey Kid, Welcome to Your First Story!</h1>
+
+<div class="hero">
+  <img src="riya.png" class="avatar">
+   <div class="hero-text">
+      <p>We are so excited you are here! Let’s begin a gentle and magical story together.</p>
+     
+
+<p>Riya has an important school exam coming soon.  
+She is studying sincerely, but a small worry keeps popping up inside.</p>
+
+<p>Then something special happens…  
+A soft whisper helps Riya feel calm and confident.</p>
+
+<p>Curious to know the secret?  
+Click the video below and enjoy the story together.</p>
+
+    </div>
+</div>
+
+<div class="quiz-note">🎯 During the story the video will pause & ask fun questions!</div>
+
+<p>Click the video below and enjoy the story 🎉</p>
+
+<!-- 🎥 STORY VIDEO -->
+<div id="player-wrapper">
+  <video id="storyVideo" controls playsinline preload="auto" controlsList="nofullscreen nodownload noplaybackrate">
+    <source
+      src="  https://res.cloudinary.com/db3fgmc1c/video/upload/v1769061769/gita_part1_unsdr7.mp4"
+      type="video/mp4"> 
+	  <!-- <source src="story.mp4" > -->
+  </video>
+</div>
+
+<!-- ❓ QUESTION OVERLAY -->
+<div id="overlay">
+  <div id="question-box">
+    <div id="question-text"></div>
+    <button class="opt-btn" id="btnA"></button>
+    <button class="opt-btn" id="btnB"></button>
+    <button class="opt-btn" id="btnC"></button>
+  <button id="continue-btn">Continue</button>
+
+  </div>
+</div>
+
+
+<!-- 🏆 SCORE BOARD -->
+<div id="scoreBoard" style="
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.95);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 20000;
+">
+  <div style="
+    background: #fff3d9;
+    padding: 30px;
+    border-radius: 20px;
+    border: 4px solid #ff8c00;
+    width: 340px;
+    text-align: center;
+  ">
+    <p>👨‍👩‍👧 <strong>For Parents</strong></p>
+	<p id="scoreText"></p>
+  <p>
+    We’ve created a gentle learning & reflection guide  
+    to help you continue this story together.
+  </p>
+
+   <button
+  onclick="generatePDFReport(questionReport, score, questions.length)"
+  style="
+    padding: 12px 18px;
+    border: none;
+    border-radius: 10px;
+    background: #ff8c00;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+  "
+>
+  📄 Download Parent Guide (PDF)
+</button>
+
+
+    <button onclick="closeScoreBoard()" style="
+      padding:8px 14px;
+      border:none;
+      border-radius:10px;
+      background:#ccc;
+      font-size:14px;
+      cursor:pointer;
+      margin-top:14px;
+      width:100%;
+    ">
+      ❌ Close
+    </button>
+  </div>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="pdfReport.js"></script>
+
+<script>
+
+const wrapper = document.getElementById("player-wrapper");
+const wrongMsg = document.getElementById("wrong-msg");
+
+let currentQuestionIndex = 0;
+let questionActive = false;
+let score = 0;
+//let questionReport = [];
+
+const questions = [
+
+{
+    time: 67.5,
+   text: `How do you usually feel when it’s your school exam day 
+or competition day or something very important to you?
+Tap the face that feels most like you.`,
+options: { A: "😀 Happy & Confident", B: "😟😟 A Little Worried", C: "😰😰😰😰😰 Very Nervous" }
+  },
+  
+  {
+    time: 125,
+    text: "What helps you do your best in exams?",
+    options: { A: "🗓️ Make a timetable", B: "⚽ Skip playtime for some time", C: "📵 Reduce screen time" }
+  },
+  {
+    time: 175,
+    text: "How do you feel when your parents support you in such moments?",
+    options: { A: "😊 Relaxed", B: "💛 Confident", C: "🤗 Happy"}
+  },
+   {
+    time: 72,
+    text: "what happens when we worry too much?",
+    options: { A: "💭 Mind feels heavy", B: "📚 Focus reduces", C: "😌 Calmness goes away" }
+  }
+  
+];
+
+const storyVideo = document.getElementById("storyVideo");
+
+const videoParts = [
+  "https://res.cloudinary.com/db3fgmc1c/video/upload/v1769061769/gita_part1_unsdr7.mp4",
+  "https://res.cloudinary.com/db3fgmc1c/video/upload/v1769061779/gita_part2_tmlset.mp4"
+];
+
+let currentPart = 0;
+
+  
+let questionReport = questions.map((q, index) => ({
+  questionNumber: index + 1,
+  question: q.text,
+  options: q.options,
+  selectedOptions: [],      // filled if answered
+  answered: false           // true / false
+}));
+
+
+storyVideo.addEventListener("play", () => {
+  wrapper.classList.add("fullscreen");
+  document.body.style.overflow = "hidden";
+});
+
+storyVideo.addEventListener("timeupdate", () => {
+  if (questionActive || currentPart !== 0) return;
+
+  const q = questions[currentQuestionIndex];
+  if (q && storyVideo.currentTime >= q.time) {
+    showQuestion(q);
+  }
+});
+
+
+
+let selectedOptions = [];
+
+
+const overlay = document.getElementById("overlay");
+const btnA = document.getElementById("btnA");
+const btnB = document.getElementById("btnB");
+const btnC = document.getElementById("btnC");
+
+
+function showQuestion(q) {
+  questionActive = true;
+  storyVideo.pause();
+
+  document.getElementById("question-text").innerText = q.text;
+
+  btnA.innerText = q.options.A;
+  btnB.innerText = q.options.B;
+  btnC.innerText = q.options.C;
+
+  overlay.style.display = "flex";
+
+  selectedOptions = [];
+
+  // reset UI state
+  [btnA, btnB, btnC].forEach(btn => btn.classList.remove("selected"));
+ 
+}
+
+function toggleOption(val, btn) {
+  if (selectedOptions.includes(val)) {
+    // unselect
+    selectedOptions = selectedOptions.filter(v => v !== val);
+    btn.classList.remove("selected");
+  } else {
+    // select
+    selectedOptions.push(val);
+    btn.classList.add("selected");
+  }
+}
+
+
+function selectOption(val) {
+  questionReport[currentQuestionIndex].selectedOption = val;
+
+  // Optional: show gentle animation or message
+  overlay.style.display = "none";
+  questionActive = false;
+  currentQuestionIndex++;
+  storyVideo.play();
+}
+
+btnA.onclick = () => toggleOption("A", btnA);
+btnB.onclick = () => toggleOption("B", btnB);
+btnC.onclick = () => toggleOption("C", btnC);
+
+document.getElementById("continue-btn").onclick = () => {
+  const report = questionReport[currentQuestionIndex];
+
+  report.selectedOptions = [...selectedOptions];
+  report.answered = selectedOptions.length > 0;
+
+  // If kid did not answer
+  if (!report.answered) {
+    report.selectedOptions = ["Not Answered"];
+  }
+
+  overlay.style.display = "none";
+  questionActive = false;
+  currentQuestionIndex++;
+  storyVideo.play();
+};
+
+
+
+function closeScoreBoard() {
+  document.getElementById("scoreBoard").style.display = "none";
+  wrapper.classList.remove("fullscreen");
+  document.body.style.overflow = "";
+}
+
+function enterFakeFullscreen() {
+  wrapper.classList.add("fullscreen");
+  document.body.style.overflow = "hidden";
+}
+
+function exitFakeFullscreen() {
+  wrapper.classList.remove("fullscreen");
+  document.body.style.overflow = "";
+}
+
+storyVideo.addEventListener("play", enterFakeFullscreen);
+//storyVideo.addEventListener("ended", exitFakeFullscreen);
+
+storyVideo.addEventListener("ended", () => {
+
+  // If part-1 ended → load part-2
+  if (currentPart === 0) {
+    currentPart = 1;
+    storyVideo.src = videoParts[currentPart];
+    storyVideo.load();
+    storyVideo.play();
+    return;
+  }
+
+  // If part-2 ended → show scoreboard
+  questionActive = false;
+  overlay.style.display = "none";
+
+  exitFakeFullscreen();
+
+  document.getElementById("scoreText").innerText =
+    "Thank you for watching 🌸";
+
+  document.getElementById("scoreBoard").style.display = "flex";
+});
+
+
+let maxWatchedTime = 0;
+
+// Track natural progress
+video.addEventListener("timeupdate", () => {
+  if (!video.seeking && !questionActive) {
+    maxWatchedTime = Math.max(maxWatchedTime, video.currentTime);
+  }
+});
+
+
+
+function showMessage(text) {
+  const msg = document.getElementById("kidMessage");
+  msg.innerText = text;
+  msg.style.opacity = "1";
+
+  clearTimeout(msg.hideTimer);
+  msg.hideTimer = setTimeout(() => {
+    msg.style.opacity = "0";
+  }, 2000);
+}
+
+
+
+</script>
+<div id="kidMessage"></div>
+
+</body>
+</html>
